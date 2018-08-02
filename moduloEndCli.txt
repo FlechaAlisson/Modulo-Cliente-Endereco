@@ -1,0 +1,73 @@
+
+-- TABELAS ENDEREÇO -- 
+
+	CREATE TABLE Pais (
+		idPais INT NOT NULL AUTO_INCREMENT,
+		pais VARCHAR(45) NOT NULL,
+		CONSTRAINT PK_Pais PRIMARY KEY (idPais)
+	);
+
+	CREATE TABLE Estado (
+		idEstado INT NOT NULL AUTO_INCREMENT,
+		estado VARCHAR(45) NOT NULL,
+		idPais INT NOT NULL,
+		CONSTRAINT PK_Estado PRIMARY KEY (idEstado),
+		CONSTRAINT FK_Pais FOREIGN KEY (idPais) REFERENCES Pais (idPais)
+	);
+
+	CREATE TABLE Cidade (
+		idCidade INT NOT NULL AUTO_INCREMENT,
+		cidade VARCHAR(45) NOT NULL,
+		idEstado INT NOT NULL,
+		CONSTRAINT PK_Cidade PRIMARY KEY (idCidade),
+		CONSTRAINT FK_Estado FOREIGN KEY (idEstado) REFERENCES Estado (idEstado)
+	);
+
+	CREATE TABLE Rua (
+		idRua INT NOT NULL AUTO_INCREMENT,
+		rua VARCHAR(45) NOT NULL,
+		CONSTRAINT PK_Rua PRIMARY KEY (idRua)
+	);
+
+	CREATE TABLE Bairro (
+		idBairro INT NOT NULL AUTO_INCREMENT,
+		bairro VARCHAR(45) NOT NULL,
+		CONSTRAINT PK_Bairro PRIMARY KEY (idBairro)
+	);
+
+	CREATE TABLE Endereco (
+		idEndereco INT NOT NULL AUTO_INCREMENT,
+		idRua INT NOT NULL,
+		idBairro INT NOT NULL,
+		idCidade INT NOT NULL,
+		CONSTRAINT PK_Endereco PRIMARY KEY (idEndereco),
+		CONSTRAINT FK_Rua FOREIGN KEY (idRua) REFERENCES Rua (idRua),
+		CONSTRAINT FK_Bairro FOREIGN KEY (idBairro) REFERENCES Bairro (idBairro),
+		CONSTRAINT FK_Cidade FOREIGN KEY (idCidade) REFERENCES Cidade (idCidade)
+	);
+
+-- TABELAS DO CLIENTE --
+
+CREATE TABLE Email (
+	idEmail INT NOT NULL AUTO_INCREMENT,
+	email VARCHAR(45) NULL,
+	CONSTRAINT PK_Email PRIMARY KEY (idEmail)
+);	
+
+CREATE TABLE Cliente (
+	idCliente INT NOT NULL AUTO_INCREMENT,
+	nome VARCHAR(45) NOT NULL,
+	cpf VARCHAR(45) NOT NULL,
+	idEmail INT NOT NULL,
+	CONSTRAINT PK_Cliente PRIMARY KEY (idCliente),
+	CONSTRAINT FK_Cliente_Email FOREIGN KEY (idEmail) REFERENCES Email (idEmail)
+);
+
+CREATE TABLE EnderecoCliente (
+	idEndereco INT NOT NULL AUTO_INCREMENT,
+	idCliente INT NOT NULL,
+	complemento VARCHAR(45) NOT NULL,
+	num INT NOT NULL,
+	CONSTRAINT FK_EnderecoCliente_Endereco FOREIGN KEY (idEndereco) REFERENCES Endereco (idEndereco),
+	CONSTRAINT FK_EnderecoCliente_Cliente FOREIGN KEY (idCliente) REFERENCES Cliente (idCliente)
+);
